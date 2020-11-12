@@ -342,6 +342,7 @@ final class MethodCalledOnElementFailsOnTest extends IntegrationTest {
   void shouldCondition_WhenInnerElementFromOuterElementFoundByIndexInFilteredCollection_WithEmptyFilteredCollection() {
     SelenideElement element = $$("ul li").filterBy(cssClass("nonexistent")).get(0).find("label");
 
+    
     try {
       element.shouldHave(exactText("detective"));
       fail("Expected ElementNotFound");
