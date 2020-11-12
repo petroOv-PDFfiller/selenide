@@ -387,6 +387,7 @@ final class MethodCalledOnElementFailsOnTest extends IntegrationTest {
     } catch (ElementNotFound expected) {
       assertThat(expected)
         .hasMessageStartingWith("Element not found {ul li.filter(css class 'the-expanse')[0]/.nonexistent}");
+      
       assertThat(expected)
         .hasMessageContaining("Expected: exact text 'detective'");
       assertScreenshot(expected);
