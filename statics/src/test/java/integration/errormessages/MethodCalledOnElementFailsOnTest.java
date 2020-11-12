@@ -335,6 +335,7 @@ final class MethodCalledOnElementFailsOnTest extends IntegrationTest {
       assertThat(expected.getCause())
         .hasMessageMatching("Index: 0");
     }
+    
   }
 
   @Test
