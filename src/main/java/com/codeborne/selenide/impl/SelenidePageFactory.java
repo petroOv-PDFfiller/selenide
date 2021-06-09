@@ -192,6 +192,9 @@ public class SelenidePageFactory implements PageObjectFactory {
     else if (ElementsContainer.class.isAssignableFrom(field.getType())) {
       return createElementsContainer(driver, searchContext, field, selector);
     }
+    else if (ElementsContainerCollection.class.isAssignableFrom(field.getType())) {
+      return createElementsCollectionContainer(driver, searchContext, field, genericTypes, selector);
+    }
     else if (isDecoratableList(field, genericTypes, ElementsContainer.class)) {
       return createElementsContainerList(driver, searchContext, field, genericTypes, selector);
     }
@@ -208,6 +211,17 @@ public class SelenidePageFactory implements PageObjectFactory {
 
   @CheckReturnValue
   @Nonnull
+  protected <T extends ElementsContainer> ElementsContainerCollection<T> createElementsCollectionContainer(Driver driver, @Nullable WebElementSource searchContext,
+                                                                                             Field field, Type[] genericTypes, By selector) {
+    genericTypes = field.getGenericType() instanceof ParameterizedType ?
+      ((ParameterizedType) field.getGenericType()).getActualTypeArguments() : new Type[0];
+    Class<?> listType = getListGenericType(field, genericTypes);
+
+    return new ElementsContainerCollection<>(this, driver, searchContext, field, listType, genericTypes, selector);
+  }
+
+  @CheckReturnValue
+  @Nonnull
   protected List<ElementsContainer> createElementsContainerList(Driver driver, @Nullable WebElementSource searchContext,
                                                                 Field field, Type[] genericTypes, By selector) {
     Class<?> listType = getListGenericType(field, genericTypes);
@@ -215,7 +229,7 @@ public class SelenidePageFactory implements PageObjectFactory {
       throw new IllegalArgumentException("Cannot detect list type for " + field);
     }
 
-    return new ElementsContainerCollection(this, driver, searchContext, field, listType, genericTypes, selector);
+    return new ElementsContainerCollection<ElementsContainer>(this, driver, searchContext, field, listType, genericTypes, selector);
   }
 
   @CheckReturnValue
